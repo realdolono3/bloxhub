@@ -18,48 +18,41 @@
       padding: 10px;
       margin: 5px;
       font-size: 16px;
-      width: 300px;
     }
   </style>
 </head>
 <body>
 
-  <h2>Send a message to Discord</h2>
-  <input type="text" id="message" placeholder="Type your message here">
-  <button id="sendBtn">Send</button>
+  <h2>Submit Request</h2>
+  <input type="text" id="message" placeholder="Type your message here" />
+  <button onclick="sendMessage()">Send</button>
 
   <script>
-    const MAX_LENGTH = 1999;
-    const webhookURL = "https://discord.com/api/webhooks/1449268767229087755/b6BZTUyifPg0FNUFJPLFZwjeeD7In3bgDJ3CAtcU-Vl7o-9cVN_OHde-xfyFJrg0na5M";
-
-    document.getElementById("sendBtn").addEventListener("click", sendMessage);
-
     async function sendMessage() {
-      let message = document.getElementById("message").value;
+      const message = document.getElementById('message').value;
       if (!message) {
         alert("Please type something!");
         return;
       }
 
-      const parts = [];
-      while (message.length > 0) {
-        parts.push(message.slice(0, MAX_LENGTH));
-        message = message.slice(MAX_LENGTH);
-      }
+      const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wzPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
 
-      for (let part of parts) {
-        await fetch(webhookURL, {
+      try {
+        const response = await fetch(webhookURL, {
           method: "POST",
-          mode: "no-cors",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ content: part })
+          body: JSON.stringify({ content: message })
         });
 
-        await new Promise(r => setTimeout(r, 150));
+        if (response.ok) {
+          alert("Message sent!");
+          document.getElementById('message').value = "";
+        } else {
+          alert("Failed to send message.");
+        }
+      } catch (error) {
+        alert("Error: " + error);
       }
-
-      alert("Message sent!");
-      document.getElementById("message").value = "";
     }
   </script>
 
