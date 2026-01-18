@@ -23,7 +23,7 @@
 </head>
 <body>
 
-  <h2>Send a message to Discord</h2>
+  <h2>abcdfgWHAT</h2>
   <input type="text" id="message" placeholder="Type your message here" />
   <button onclick="sendMessage()">Send</button>
 
@@ -35,30 +35,35 @@
         return;
       }
 
-      const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wzPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
+      const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
       const MAX_LENGTH = 1999;
-
-      // Split message into chunks if needed
       const parts = [];
-      while (message.length > 0) {
-        parts.push(message.slice(0, MAX_LENGTH));
-        message = message.slice(MAX_LENGTH);
+
+      // If message is short, just send it once
+      if (message.length <= MAX_LENGTH) {
+        parts.push(message);
+      } else {
+        // Message too long, split into chunks
+        while (message.length > 0) {
+          parts.push(message.slice(0, MAX_LENGTH));
+          message = message.slice(MAX_LENGTH);
+        }
       }
 
       try {
+        // Send each part
         for (let i = 0; i < parts.length; i++) {
           await fetch(webhookURL, {
             method: "POST",
-            mode: "no-cors", // keeps browser from blocking request
+            mode: "no-cors",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ content: parts[i] })
           });
-
-          // optional small delay to be safe (uncomment if hitting rate limits)
+          // Optional delay if hitting rate limits:
           // await new Promise(r => setTimeout(r, 200));
         }
 
-        alert("Message sent!");
+        alert(`Message sent in ${parts.length} part(s)!`);
         document.getElementById('message').value = "";
       } catch (error) {
         alert("Error: " + error);
