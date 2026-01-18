@@ -23,48 +23,33 @@
 </head>
 <body>
 
-  <h2>abcdfgWHAT</h2>
+  <h2>Send a message to Discord</h2>
   <input type="text" id="message" placeholder="Type your message here" />
   <button onclick="sendMessage()">Send</button>
 
   <script>
     async function sendMessage() {
-      let message = document.getElementById('message').value;
+      const message = document.getElementById('message').value;
       if (!message) {
         alert("Please type something!");
         return;
       }
 
-      const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
-      const MAX_LENGTH = 1999;
-      const parts = [];
-
-      // If message is short, just send it once
-      if (message.length <= MAX_LENGTH) {
-        parts.push(message);
-      } else {
-        // Message too long, split into chunks
-        while (message.length > 0) {
-          parts.push(message.slice(0, MAX_LENGTH));
-          message = message.slice(MAX_LENGTH);
-        }
-      }
+      const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wzPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
 
       try {
-        // Send each part
-        for (let i = 0; i < parts.length; i++) {
-          await fetch(webhookURL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ content: parts[i] })
-          });
-          // Optional delay if hitting rate limits:
-          // await new Promise(r => setTimeout(r, 200));
-        }
+        const response = await fetch(webhookURL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: message })
+        });
 
-        alert(`Message sent in ${parts.length} part(s)!`);
-        document.getElementById('message').value = "";
+        if (response.ok) {
+          alert("Message sent!");
+          document.getElementById('message').value = "";
+        } else {
+          alert("Failed to send message.");
+        }
       } catch (error) {
         alert("Error: " + error);
       }
