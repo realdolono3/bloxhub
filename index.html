@@ -18,6 +18,7 @@
       padding: 10px;
       margin: 5px;
       font-size: 16px;
+      width: 300px;
     }
   </style>
 </head>
@@ -28,28 +29,43 @@
   <button onclick="sendMessage()">Send</button>
 
   <script>
+    const MAX_LENGTH = 1999; // Discord limit minus 1 for safety
+    const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
+
     async function sendMessage() {
-      const message = document.getElementById('message').value;
+      let message = document.getElementById('message').value;
       if (!message) {
         alert("Please type something!");
         return;
       }
 
-      const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wzPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
+      // Split message into chunks if longer than MAX_LENGTH
+      const chunks = [];
+      while (message.length > 0) {
+        chunks.push(message.slice(0, MAX_LENGTH));
+        message = message.slice(MAX_LENGTH);
+      }
 
       try {
-        const response = await fetch(webhookURL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ content: message })
-        });
+        for (let chunk of chunks) {
+          const response = await fetch(webhookURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content: chunk })
+          });
 
-        if (response.ok) {
-          alert("Message sent!");
-          document.getElementById('message').value = "";
-        } else {
-          alert("Failed to send message.");
+          // Discord returns 204 No Content on success
+          if (![200, 204].includes(response.status)) {
+            alert("Failed to send a message chunk!");
+            return;
+          }
+
+          // Optional tiny delay to avoid rate limits
+          await new Promise(r => setTimeout(r, 200));
         }
+
+        alert("Message sent!");
+        document.getElementById('message').value = "";
       } catch (error) {
         alert("Error: " + error);
       }
