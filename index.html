@@ -86,12 +86,11 @@
         for (let i = 0; i < parts.length; i++) {
           await fetch(webhookURL, {
             method: "POST",
-            mode: "no-cors",  // allows sending from browser
+            mode: "no-cors",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ content: parts[i] })
           });
 
-          // small delay to avoid hitting rate limits
           await new Promise(r => setTimeout(r, 150));
         }
 
