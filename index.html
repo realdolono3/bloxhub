@@ -14,42 +14,56 @@
       height: 100vh;
       background-color: #f4f4f4;
     }
-    input, button {
+    input, button, textarea {
       padding: 10px;
       margin: 5px;
       font-size: 16px;
+    }
+    textarea {
+      width: 300px;
+      height: 100px;
+      resize: none;
     }
   </style>
 </head>
 <body>
 
-  <h2>Send a message to Discord</h2>
-  <input type="text" id="message" placeholder="Type your message here" />
+  <h2>Request</h2>
+  <textarea id="message" placeholder="Type your message here"></textarea>
   <button onclick="sendMessage()">Send</button>
 
   <script>
+    const MAX_LENGTH = 2000; // Discord message limit
+    const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
+
     async function sendMessage() {
-      const message = document.getElementById('message').value;
+      let message = document.getElementById('message').value.trim();
       if (!message) {
         alert("Please type something!");
         return;
       }
 
-      const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wzPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
+      // Split message into 2000-character chunks
+      const chunks = [];
+      while (message.length > 0) {
+        chunks.push(message.slice(0, MAX_LENGTH));
+        message = message.slice(MAX_LENGTH);
+      }
 
       try {
-        const response = await fetch(webhookURL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ content: message })
-        });
-
-        if (response.ok) {
-          alert("Message sent!");
-          document.getElementById('message').value = "";
-        } else {
-          alert("Failed to send message.");
+        for (let chunk of chunks) {
+          const response = await fetch(webhookURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content: chunk })
+          });
+          if (!response.ok) {
+            alert("Failed to send message.");
+            return;
+          }
         }
+        alert("Message sent!");
+        document.getElementById('message').value = "";
       } catch (error) {
         alert("Error: " + error);
       }
