@@ -29,7 +29,7 @@
   <button onclick="sendMessage()">Send</button>
 
   <script>
-    const MAX_LENGTH = 1999; // Discord limit minus 1 for safety
+    const MAX_LENGTH = 1999; // Discord character limit
     const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
 
     async function sendMessage() {
@@ -39,7 +39,7 @@
         return;
       }
 
-      // Split message into chunks if longer than MAX_LENGTH
+      // Split message into chunks if too long
       const chunks = [];
       while (message.length > 0) {
         chunks.push(message.slice(0, MAX_LENGTH));
@@ -54,14 +54,14 @@
             body: JSON.stringify({ content: chunk })
           });
 
-          // Discord returns 204 No Content on success
-          if (![200, 204].includes(response.status)) {
-            alert("Failed to send a message chunk!");
+          // Use response.ok instead of manually checking status
+          if (!response.ok) {
+            alert("Failed to send message!");
             return;
           }
 
-          // Optional tiny delay to avoid rate limits
-          await new Promise(r => setTimeout(r, 200));
+          // Tiny delay to avoid rate limits for long messages
+          await new Promise(r => setTimeout(r, 150));
         }
 
         alert("Message sent!");
