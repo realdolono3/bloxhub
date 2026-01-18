@@ -1,38 +1,71 @@
-<script>
-  const MAX_LENGTH = 1999;
-  const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
-
-  async function sendMessage() {
-    let message = document.getElementById('message').value;
-    if (!message) {
-      alert("Please type something!");
-      return;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Webhook Tester</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
     }
-
-    // Split message if too long
-    const chunks = [];
-    while (message.length > 0) {
-      chunks.push(message.slice(0, MAX_LENGTH));
-      message = message.slice(MAX_LENGTH);
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
     }
+  </style>
+</head>
+<body>
 
-    try {
-      for (let chunk of chunks) {
-        await fetch(webhookURL, {
-          method: "POST",
-          mode: "no-cors", // 🔑 THIS IS THE KEY
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ content: chunk })
-        });
+  <h2>Send a message to Discord</h2>
+  <input type="text" id="message" placeholder="Type your message here" />
+  <button onclick="sendMessage()">Send</button>
 
-        // small delay to avoid rate limits
-        await new Promise(r => setTimeout(r, 150));
+  <script>
+    const MAX_LENGTH = 1999;
+    const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wzPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
+
+    async function sendMessage() {
+      let message = document.getElementById('message').value;
+      if (!message) {
+        alert("Please type something!");
+        return;
       }
 
-      alert("Message sent!");
-      document.getElementById('message').value = "";
-    } catch (error) {
-      alert("Error: " + error);
+      // Split message into normal-sized messages
+      const parts = [];
+      while (message.length > 0) {
+        parts.push(message.slice(0, MAX_LENGTH));
+        message = message.slice(MAX_LENGTH);
+      }
+
+      try {
+        for (let part of parts) {
+          // SAME METHOD as before, just repeated
+          await fetch(webhookURL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content: part })
+          });
+
+          // small delay so Discord treats them like separate messages
+          await new Promise(r => setTimeout(r, 150));
+        }
+
+        alert("Message sent!");
+        document.getElementById('message').value = "";
+      } catch (error) {
+        alert("Error: " + error);
+      }
     }
-  }
-</script>
+  </script>
+
+</body>
+</html>
