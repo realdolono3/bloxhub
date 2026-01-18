@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Submit</title>
+  <title>Discord Webhook Tester</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -14,27 +14,47 @@
       height: 100vh;
       background-color: #f4f4f4;
     }
-    textarea, button {
+    input, button {
       padding: 10px;
       margin: 5px;
       font-size: 16px;
-    }
-    textarea {
-      width: 300px;
-      height: 100px;
-      resize: none;
     }
   </style>
 </head>
 <body>
 
   <h2>Send a message to Discord</h2>
-  <textarea id="message" placeholder="Type your message here"></textarea>
+  <input type="text" id="message" placeholder="Type your message here" />
   <button onclick="sendMessage()">Send</button>
 
   <script>
-    const MAX_LENGTH = 2000; // Discord limit
-    const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
-
     async function sendMessage() {
-      let message = document.getElem
+      const message = document.getElementById('message').value;
+      if (!message) {
+        alert("Please type something!");
+        return;
+      }
+
+      const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wzPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
+
+      try {
+        const response = await fetch(webhookURL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: message })
+        });
+
+        if (response.ok) {
+          alert("Message sent!");
+          document.getElementById('message').value = "";
+        } else {
+          alert("Failed to send message.");
+        }
+      } catch (error) {
+        alert("Error: " + error);
+      }
+    }
+  </script>
+
+</body>
+</html>
