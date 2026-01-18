@@ -1,26 +1,64 @@
-async function sendMessage() {
-  let message = document.getElementById("message").value;
-  if (!message) {
-    alert("Please type something!");
-    return;
-  }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Webhook Tester</title>
 
-  const MAX = 1999;
-  const webhookURL = "YOUR_WEBHOOK_URL";
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
+      width: 300px;
+    }
+  </style>
+</head>
 
-  while (message.length > 0) {
-    const piece = message.slice(0, MAX);
-    message = message.slice(MAX); // 🔑 change message value
+<body>
 
-    await fetch(webhookURL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: piece }) // SAME LINE AS BEFORE
-    });
+  <h2>Send a message to Discord</h2>
+  <input type="text" id="message" placeholder="Type your message here">
+  <button onclick="sendMessage()">Send</button>
 
-    await new Promise(r => setTimeout(r, 150));
-  }
+  <script>
+    async function sendMessage() {
+      let message = document.getElementById("message").value;
+      if (!message) {
+        alert("Please type something!");
+        return;
+      }
 
-  alert("Message sent!");
-}
+      const MAX = 1999;
+      const webhookURL = "PASTE_YOUR_WEBHOOK_URL_HERE";
+
+      while (message.length > 0) {
+        const piece = message.slice(0, MAX);
+        message = message.slice(MAX);
+
+        await fetch(webhookURL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: piece })
+        });
+
+        await new Promise(r => setTimeout(r, 150));
+      }
+
+      alert("Message sent!");
+      document.getElementById("message").value = "";
+    }
+  </script>
+
+</body>
+</html>
