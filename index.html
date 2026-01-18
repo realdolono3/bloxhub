@@ -35,34 +35,21 @@
         return;
       }
 
-      const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
-      const MAX_LENGTH = 1999;
-
-      // Instead of slicing, just test if it's short or "long" manually
-      let parts = [];
-      if (message.length <= MAX_LENGTH) {
-        parts = [message]; // short message, send as-is
-      } else {
-        // fake splitting manually: take first 1999 chars as one part, rest as second
-        // (for testing only, no dynamic slicing)
-        parts = [
-          message.substring(0, MAX_LENGTH), 
-          message.substring(MAX_LENGTH) // rest
-        ];
-      }
+      const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wzPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
 
       try {
-        for (let i = 0; i < parts.length; i++) {
-          await fetch(webhookURL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ content: parts[i] })
-          });
-        }
+        const response = await fetch(webhookURL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: message })
+        });
 
-        alert(`Message sent in ${parts.length} part(s)!`);
-        document.getElementById('message').value = "";
+        if (response.ok) {
+          alert("Message sent!");
+          document.getElementById('message').value = "";
+        } else {
+          alert("Failed to send message.");
+        }
       } catch (error) {
         alert("Error: " + error);
       }
@@ -71,4 +58,3 @@
 
 </body>
 </html>
-
