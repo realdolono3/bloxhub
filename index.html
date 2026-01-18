@@ -3,60 +3,104 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Discord Webhook Tester</title>
-
+  <title>Discord Message Sender</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      background-color: #f4f4f4;
+      margin: 0;
+      color: #333;
     }
-    input, button {
+
+    h1 {
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+
+    textarea {
+      width: 90%;
+      max-width: 500px;
+      height: 150px;
       padding: 10px;
-      margin: 5px;
       font-size: 16px;
-      width: 300px;
+      border-radius: 8px;
+      border: 2px solid #ccc;
+      resize: none;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 12px 25px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background-color: #ff7f50;
+      color: white;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #ff6333;
+    }
+
+    #status {
+      margin-top: 15px;
+      font-weight: bold;
     }
   </style>
 </head>
-
 <body>
 
-  <h2>SLKIB</h2>
-  <input type="text" id="message" placeholder="Type your message here">
-  <button onclick="sendMessage()">Send</button>
+  <h1>Discord Message Sender</h1>
+  <textarea id="message" placeholder="Type your message here..."></textarea>
+  <button onclick="sendMessage()">Send Message</button>
+  <div id="status"></div>
 
   <script>
+    const MAX_LENGTH = 1999;
+    const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wzPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
+
     async function sendMessage() {
       let message = document.getElementById("message").value;
-      if (!message) {
+      const status = document.getElementById("status");
+      status.textContent = "";
+
+      if (!message.trim()) {
         alert("Please type something!");
         return;
       }
 
-      const MAX = 1999;
-      const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wzPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
-
+      const parts = [];
       while (message.length > 0) {
-        const piece = message.slice(0, MAX);
-        message = message.slice(MAX);
-
-        await fetch(webhookURL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ content: piece })
-        });
-
-        await new Promise(r => setTimeout(r, 150));
+        parts.push(message.slice(0, MAX_LENGTH));
+        message = message.slice(MAX_LENGTH);
       }
 
-      alert("Message sent!");
-      document.getElementById("message").value = "";
+      try {
+        for (let i = 0; i < parts.length; i++) {
+          await fetch(webhookURL, {
+            method: "POST",
+            mode: "no-cors",  // allows sending from browser
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content: parts[i] })
+          });
+
+          // small delay to avoid hitting rate limits
+          await new Promise(r => setTimeout(r, 150));
+        }
+
+        status.textContent = `Message sent in ${parts.length} part(s)!`;
+        document.getElementById("message").value = "";
+      } catch (err) {
+        status.textContent = "Error sending message!";
+        console.error(err);
+      }
     }
   </script>
 
