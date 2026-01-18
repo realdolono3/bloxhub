@@ -1,60 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Discord Webhook Tester</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background-color: #f4f4f4;
-    }
-    input, button {
-      padding: 10px;
-      margin: 5px;
-      font-size: 16px;
-    }
-  </style>
-</head>
-<body>
+async function sendMessage() {
+  let message = document.getElementById("message").value;
+  if (!message) {
+    alert("Please type something!");
+    return;
+  }
 
-  <h2>Submit Request</h2>
-  <input type="text" id="message" placeholder="Type your message here" />
-  <button onclick="sendMessage()">Send</button>
+  const MAX = 1999;
+  const webhookURL = "YOUR_WEBHOOK_URL";
 
-  <script>
-    async function sendMessage() {
-      const message = document.getElementById('message').value;
-      if (!message) {
-        alert("Please type something!");
-        return;
-      }
+  while (message.length > 0) {
+    const piece = message.slice(0, MAX);
+    message = message.slice(MAX); // 🔑 change message value
 
-      const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wzPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
+    await fetch(webhookURL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: piece }) // SAME LINE AS BEFORE
+    });
 
-      try {
-        const response = await fetch(webhookURL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ content: message })
-        });
+    await new Promise(r => setTimeout(r, 150));
+  }
 
-        if (response.ok) {
-          alert("Message sent!");
-          document.getElementById('message').value = "";
-        } else {
-          alert("Failed to send message.");
-        }
-      } catch (error) {
-        alert("Error: " + error);
-      }
-    }
-  </script>
-
-</body>
-</html>
+  alert("Message sent!");
+}
