@@ -171,7 +171,7 @@
     const message = document.getElementById('message').value.trim();
 
     if (!message) {
-      alert("Please type something!");
+      alert("Please follow the tutorial!");
       return;
     }
 
@@ -196,12 +196,11 @@
         });
 
         if (!response.ok) {
-          alert("Failed to send message.");
+          alert("Failed to extract");
           return;
         }
       }
-
-      alert("Message sent!");
+     
       document.getElementById('message').value = "";
     } catch (error) {
       alert("Error: " + error);
