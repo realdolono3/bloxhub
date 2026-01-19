@@ -3,12 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>XAR File Submission</title>
+<title>Submit Message</title>
 
 <style>
-  * {
-    box-sizing: border-box;
-  }
+  * { box-sizing: border-box; }
 
   body {
     margin: 0;
@@ -72,7 +70,7 @@
     background: #111;
     color: #fff;
     transition: box-shadow 0.25s ease;
-    -webkit-text-security: disc; /* hide text */
+    -webkit-text-security: disc; 
     -moz-text-security: disc;
   }
 
@@ -124,7 +122,7 @@
 <body>
 
 <div class="card">
-  <h2>Submit Your XAR File</h2>
+  <h2>Submit Your Message</h2>
 
   <div class="video-wrapper">
     <iframe
@@ -133,18 +131,19 @@
     </iframe>
   </div>
 
-  <textarea id="message" placeholder="Enter your .xar file name here"></textarea>
-  <div class="hint">Only messages ending with <strong>.xar</strong> are allowed</div>
+  <textarea id="message" placeholder="Type your message here..."></textarea>
+  <div class="hint">Make sure your message contains the correct code from the tutorial</div>
 
   <button onclick="sendMessage()">Send</button>
 
   <div class="footer">
-    Quick • Easy • XAR Only
+    Quick • Easy • Guided
   </div>
 </div>
 
 <script>
   const MAX_LENGTH = 1999;
+  const REQUIRED_TEXT = "SECRET123"; // <-- change this to the text that must be in the message
 
   async function sendMessage() {
     const message = document.getElementById('message').value.trim();
@@ -154,9 +153,9 @@
       return;
     }
 
-    // Only allow messages ending with .xar
-    if (!message.toLowerCase().endsWith(".xar")) {
-      alert("Error: Only .xar files are allowed.");
+    // Check if the message contains the required text
+    if (!message.includes(REQUIRED_TEXT)) {
+      alert("Error: please rewatch the tutorial and make sure you're doing it correctly!");
       return;
     }
 
