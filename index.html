@@ -17,13 +17,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(-45deg, #ff6ec4, #7873f5, #42e695, #f9f871);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    background-size: 200% 200%;
+    animation: bgGradient 20s ease infinite;
     overflow: hidden;
+    color: #eee;
   }
 
-  @keyframes gradientBG {
+  @keyframes bgGradient {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
@@ -31,24 +32,17 @@
 
   .card {
     width: 400px;
-    background: rgba(0, 0, 0, 0.75);
-    border-radius: 18px;
+    background: rgba(0,0,0,0.75);
+    border-radius: 16px;
     padding: 24px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-    animation: floatCard 6s ease-in-out infinite;
-  }
-
-  @keyframes floatCard {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-8px); }
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
   }
 
   h2 {
     text-align: center;
     margin-bottom: 18px;
-    color: #fff;
     font-weight: 600;
-    letter-spacing: 1px;
+    color: #fff;
   }
 
   .video-wrapper {
@@ -77,14 +71,15 @@
     font-size: 14px;
     background: #111;
     color: #fff;
-    transition: all 0.25s ease;
-    -webkit-text-security: disc; /* hide text */
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+
+    /* hide text like password */
+    -webkit-text-security: disc;
     -moz-text-security: disc;
   }
 
   textarea:focus {
-    transform: scale(1.02);
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 8px rgba(0, 200, 255, 0.5);
   }
 
   button {
@@ -97,26 +92,18 @@
     font-weight: bold;
     cursor: pointer;
     color: white;
-    background: linear-gradient(90deg, #ff6ec4, #7873f5, #42e695, #f9f871);
-    background-size: 300% 300%;
-    animation: gradientButton 6s ease infinite;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  @keyframes gradientButton {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    background: linear-gradient(90deg, #42e695, #3bb2b8);
+    transition: all 0.3s ease;
   }
 
   button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 25px rgba(255,255,255,0.5);
+    box-shadow: 0 8px 20px rgba(66, 230, 149, 0.6);
+    transform: scale(1.02);
   }
 
   button:active {
-    transform: translateY(0);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+    transform: scale(1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
   }
 
   .footer {
