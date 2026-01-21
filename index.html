@@ -151,19 +151,14 @@
   const REQUIRED_TEXT = "secret"; // change if needed
 
   // ✅ FILE DOWNLOAD FUNCTION (ADDED)
-  function downloadFileFromText(text) {
-    const blob = new Blob([text], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "extracted.txt";
-    document.body.appendChild(a);
-    a.click();
-
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }
+  function downloadFile() {
+  const a = document.createElement("a");
+  a.href = "./bsswim.rbxl";   // ✅ points to the file in main
+  a.download = "bsswim.rbxl";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
 
   async function sendMessage() {
     const message = document.getElementById('message').value.trim();
